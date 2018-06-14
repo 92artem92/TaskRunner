@@ -27,7 +27,7 @@ namespace TaskRunner.Tests
             //arrange 
             var task = new ActionTask(()=>{});
             var callbackMock=new Mock<Action<ITask>>();
-            task.TaskSuccess += callbackMock.Object;
+            task.Success += callbackMock.Object;
 
             //action 
             task.Run();
@@ -42,7 +42,7 @@ namespace TaskRunner.Tests
             //arrange 
             var task = new ActionTask(() => { });
             var callbackMock = new Mock<Action<ITask>>();
-            task.TaskRunning += callbackMock.Object;
+            task.Running += callbackMock.Object;
 
             //action 
             task.Run();
@@ -59,7 +59,7 @@ namespace TaskRunner.Tests
             var task = new ActionTask(() => throw exception);
             var callbackMock = new Mock<Action<ITask,Exception>>();
 
-            task.TaskFaulted += callbackMock.Object;
+            task.Faulted += callbackMock.Object;
 
             //action 
             task.Run();

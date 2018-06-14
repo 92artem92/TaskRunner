@@ -5,25 +5,25 @@ namespace TaskRunner
     public abstract class TaskBase : ITask
     {
 
-        public event Action<ITask> TaskRunning;
-        public event Action<ITask> TaskSuccess;
-        public event Action<ITask,Exception> TaskFaulted;
+        public event Action<ITask> Running;
+        public event Action<ITask> Success;
+        public event Action<ITask,Exception> Faulted;
 
         public string Name { get; set; }
 
         public void Run()
         {
-            TaskRunning?.Invoke(this);
+            Running?.Invoke(this);
             try
             {
                 RunInternal();
             }
             catch (Exception ex)
             {
-                TaskFaulted?.Invoke(this,ex);
+                Faulted?.Invoke(this,ex);
                 return;
             }
-            TaskSuccess?.Invoke(this);
+            Success?.Invoke(this);
         }
 
         private void OnTaskRunning()

@@ -56,16 +56,16 @@ namespace TaskRunner.Demo
             if (typeIndex == 0)
                 task = new ActionTask(DoSomething);
             else
-                task = new FuncTask<string>(DoSomethingWithResult);
+                task = new AsyncTaskResult<string>(DoSomethingWithResult);
 
             var index = Interlocked.Increment(ref _taskCounter);
             task.Name = "Task " + index;
-            task.TaskSuccess += TaskCompleted;
+            task.Success += TaskSuccess;
             return task;
         }
 
 
-        private static void TaskCompleted(ITask task)
+        private static void TaskSuccess(ITask task)
         {
             Console.WriteLine($"{task.Name} completed ");
         }

@@ -6,8 +6,8 @@ namespace TaskRunner
     {
         string Name { get; set; }
         void Run();
-        event Action<ITask> TaskRunning;
-        event Action<ITask> TaskSuccess;
-        event Action<ITask, Exception> TaskFaulted;
+        event Action<ITask> Running;
+        event Action<ITask> Success;
+        event Action<ITask, Exception> Faulted;
     }
 }

@@ -11,7 +11,7 @@ namespace TaskRunner
         public AsyncTaskResult(Func<T> func)
         {
             _func = func;
-            TaskFaulted += TaskWorkItem_TaskFaulted;
+            Faulted += TaskFaulted;
         }
 
         public Task<T> GetResultAsync()
@@ -25,7 +25,7 @@ namespace TaskRunner
             _tcs.SetResult(result);
         }
 
-        private void TaskWorkItem_TaskFaulted(ITask arg, Exception ex)
+        private void TaskFaulted(ITask arg, Exception ex)
         {
             _tcs.SetException(ex);
         }
