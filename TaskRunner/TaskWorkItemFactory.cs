@@ -9,9 +9,9 @@ namespace TaskRunner
             return new ActionTask(action);
         }
 
-        public IFuncTask<T> GetInstance<T>(Func<T> func)
+        public IAsyncTaskResult<T> GetInstance<T>(Func<T> func)
         {
-            return new FuncTask<T>(func);
+            return new AsyncTaskResult<T>(func);
         }
     }
 }

@@ -3,21 +3,17 @@ using System.Threading.Tasks;
 
 namespace TaskRunner
 {
-    public class FuncTask<T> : TaskBase, IFuncTask<T>
+    public class AsyncTaskResult<T> : TaskBase, IAsyncTaskResult<T>
     {
         private readonly TaskCompletionSource<T> _tcs = new TaskCompletionSource<T>();
         private readonly Func<T> _func;
 
-        public FuncTask(Func<T> func)
+        public AsyncTaskResult(Func<T> func)
         {
             _func = func;
             TaskFaulted += TaskWorkItem_TaskFaulted;
         }
 
-        /// <summary>
-        /// Gets the result value of this task
-        /// </summary>
-        /// <returns></returns>
         public Task<T> GetResultAsync()
         {
             return _tcs.Task;
@@ -31,7 +27,6 @@ namespace TaskRunner
 
         private void TaskWorkItem_TaskFaulted(ITask arg, Exception ex)
         {
-            //set exception as task result
             _tcs.SetException(ex);
         }
     }

@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FuncTask.cs" />
+    <Compile Include="AsyncTaskResult.cs" />
     <Compile Include="IFuncTask.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="TaskRunner.cs" />
