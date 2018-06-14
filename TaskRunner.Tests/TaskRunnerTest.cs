@@ -24,7 +24,7 @@ namespace TaskRunner.Tests
         {
             //arrange 
             var taskRunner = TaskRunner.GetTaskRunner();
-            var taskMock = new Mock<ITaskWorkItem>();
+            var taskMock = new Mock<ITask>();
             taskMock.Setup(t => t.Run()).Callback(AssertTest);
 
             //action 
@@ -43,8 +43,8 @@ namespace TaskRunner.Tests
         {
             //arrange 
             var taskRunner = TaskRunner.GetTaskRunner();
-            var taskMock = new Mock<ITaskWorkItem>();
-            var secondTaskMock = new Mock<ITaskWorkItem>();
+            var taskMock = new Mock<ITask>();
+            var secondTaskMock = new Mock<ITask>();
             taskMock.Setup(t => t.Run()).Throws<Exception>();
             secondTaskMock.Setup((t) => t.Run()).Callback(AssertTest);
             //action 
@@ -57,25 +57,5 @@ namespace TaskRunner.Tests
             }
         }
 
-        [Test]
-        public void ShouldRunAllTasks()
-        {
-            //arrange 
-            var taskRunner = TaskRunner.GetTaskRunner();
-            const int taskCount = 100;
-            var actualTaskCount = 0;
-            var task = new TaskWorkItem(()=>{});
-            task.TaskCompleted += (t) =>  
-                actualTaskCount++;
-
-            //action 
-            for (var i = 0; i < taskCount; i++)
-            {
-                taskRunner.AddTask(task);
-            }
-            
-            //assert
-            Assert.That(actualTaskCount,Is.EqualTo(task));
-        }
     }
 }

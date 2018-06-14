@@ -16,7 +16,7 @@ namespace TaskRunner.Tests
             const string expectedResult = "task result";
             var funcMock=new Mock<Func<string>>();
 
-            var task = new TaskWorkItem<string>(funcMock.Object);
+            var task = new FuncTask<string>(funcMock.Object);
             funcMock.Setup(f => f()).Returns(expectedResult);
             //action
             task.Run();
@@ -32,7 +32,7 @@ namespace TaskRunner.Tests
             var exception=new NullReferenceException();
             var funcMock = new Mock<Func<string>>();
 
-            var task = new TaskWorkItem<string>(funcMock.Object);
+            var task = new FuncTask<string>(funcMock.Object);
             funcMock.Setup(f => f()).Throws(exception);
             //action
 

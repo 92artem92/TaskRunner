@@ -39,7 +39,7 @@ namespace TaskRunner.Demo
             runner.AddTask(task);
 
 
-            if (task is ITaskWorkItem<string> taskWithResult)
+            if (task is IAsyncTaskResult<string> taskWithResult)
             {
                var result= await taskWithResult.GetResultAsync();
                 Console.WriteLine($"{taskWithResult.Name} completed with result = {result}");
@@ -47,25 +47,25 @@ namespace TaskRunner.Demo
         }
 
 
-        private static ITaskWorkItem CreateTask()
+        private static ITask CreateTask()
         {
             var rnd = new Random();
             var typeIndex = rnd.Next(0, 10) % 2;
-            ITaskWorkItem task;
+            ITask task;
 
             if (typeIndex == 0)
-                task = new TaskWorkItem(DoSomething);
+                task = new ActionTask(DoSomething);
             else
-                task = new TaskWorkItem<string>(DoSomethingWithResult);
+                task = new FuncTask<string>(DoSomethingWithResult);
 
             var index = Interlocked.Increment(ref _taskCounter);
             task.Name = "Task " + index;
-            task.TaskCompleted += TaskCompleted;
+            task.TaskSuccess += TaskCompleted;
             return task;
         }
 
 
-        private static void TaskCompleted(ITaskWorkItem task)
+        private static void TaskCompleted(ITask task)
         {
             Console.WriteLine($"{task.Name} completed ");
         }

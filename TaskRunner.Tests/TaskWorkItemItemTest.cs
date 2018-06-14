@@ -12,7 +12,7 @@ namespace TaskRunner.Tests
         {
             //arrange
             var actionMock=new Mock<Action>();
-            var task=new TaskWorkItem(actionMock.Object);
+            var task=new ActionTask(actionMock.Object);
            
             //action
             task.Run();
@@ -25,30 +25,30 @@ namespace TaskRunner.Tests
         public void ShouldInvokeTaskFinished()
         {
             //arrange 
-            var task = new TaskWorkItem(()=>{});
-            var callbackMock=new Mock<Action<ITaskWorkItem>>();
-            task.TaskCompleted += callbackMock.Object;
+            var task = new ActionTask(()=>{});
+            var callbackMock=new Mock<Action<ITask>>();
+            task.TaskSuccess += callbackMock.Object;
 
             //action 
             task.Run();
 
             //assert
-            callbackMock.Verify(c=>c(It.IsAny<ITaskWorkItem>()),Times.Once);
+            callbackMock.Verify(c=>c(It.IsAny<ITask>()),Times.Once);
         }
 
         [Test]
         public void ShouldInvokeTaskRunning()
         {
             //arrange 
-            var task = new TaskWorkItem(() => { });
-            var callbackMock = new Mock<Action<ITaskWorkItem>>();
+            var task = new ActionTask(() => { });
+            var callbackMock = new Mock<Action<ITask>>();
             task.TaskRunning += callbackMock.Object;
 
             //action 
             task.Run();
 
             //assert
-            callbackMock.Verify(c => c(It.IsAny<ITaskWorkItem>()), Times.Once);
+            callbackMock.Verify(c => c(It.IsAny<ITask>()), Times.Once);
         }
 
         [Test]
@@ -56,8 +56,8 @@ namespace TaskRunner.Tests
         {
             //arrange 
             var exception = new Exception();
-            var task = new TaskWorkItem(() => throw exception);
-            var callbackMock = new Mock<Action<ITaskWorkItem,Exception>>();
+            var task = new ActionTask(() => throw exception);
+            var callbackMock = new Mock<Action<ITask,Exception>>();
 
             task.TaskFaulted += callbackMock.Object;
 
@@ -65,7 +65,7 @@ namespace TaskRunner.Tests
             task.Run();
 
             //assert
-            callbackMock.Verify(c => c(It.IsAny<ITaskWorkItem>(),exception), Times.Once);
+            callbackMock.Verify(c => c(It.IsAny<ITask>(),exception), Times.Once);
         }
     }
 }
