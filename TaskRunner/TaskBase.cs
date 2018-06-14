@@ -26,12 +26,6 @@ namespace TaskRunner
             Success?.Invoke(this);
         }
 
-        private void OnTaskRunning()
-        {
-            
-        }
-
-
         protected abstract void RunInternal();
 
     }
