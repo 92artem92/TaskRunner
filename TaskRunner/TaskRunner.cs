@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TaskRunner
 {
     public class TaskRunner
     {
+
         private  static TaskRunner _instance;
         private  static readonly object Lock=new object();
-        private readonly ConcurrentQueue<ITaskItem> _taskQueue = new ConcurrentQueue<ITaskItem>();
+        private readonly ConcurrentQueue<ITaskWorkItem> _taskQueue = new ConcurrentQueue<ITaskWorkItem>();
+        private readonly TaskWorkItemFactory _factory=new TaskWorkItemFactory();
+        public event Action<Exception> ExceptionHandler;
 
         private TaskRunner()
         {
-            var workerThread = new Thread(Worker);
+            var workerThread = new Thread(Worker) {IsBackground = true};
             workerThread.Start();
         }
 
@@ -30,27 +29,48 @@ namespace TaskRunner
                         _instance=new TaskRunner();
                 }
             }
+            
             return _instance;
         }
+
         
 
-        public virtual void AddTask(ITaskItem task)
+        public void AddTask(ITaskWorkItem task)
         {
             _taskQueue.Enqueue(task);
         }
 
-        public event Action<ITaskItem> TaskRunning;
-        public event Action<ITaskItem> TaskFinished;
+        public void AddTask(Action action)
+        {
+            AddTask(_factory.GetInstance(action));
+        }
+
+        public void AddTask<T>(Func<T> func)
+        {
+           AddTask(_factory.GetInstance(func));
+        }
+
+
 
         private void Worker()
         {
-            while(_taskQueue.TryDequeue(out var task))
+            while (true)
             {
-                TaskRunning?.Invoke(task);
-                task.Run();
-                TaskFinished?.Invoke(task);
+                while (_taskQueue.TryDequeue(out var task))
+                {
+                    try
+                    {
+                        task.Run();
+                    }
+                    //prevent tasks execution stopping 
+                    catch (Exception ex)
+                    {
+                        ExceptionHandler?.Invoke(ex);
+                    }
+                }
+                Thread.Sleep(1);
             }
-            Thread.Sleep(1);
+            
         }
     }
 

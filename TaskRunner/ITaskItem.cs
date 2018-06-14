@@ -1,12 +1,17 @@
+using System;
 using System.Threading.Tasks;
 
 namespace TaskRunner
 {
-    public interface ITaskItem
+    public interface ITaskWorkItem
     {
+        string Name { get; set; }
         void Run();
+        event Action<ITaskWorkItem> TaskRunning;
+        event Action<ITaskWorkItem> TaskCompleted;
+        event Action<ITaskWorkItem, Exception> TaskFaulted;
     }
-    public interface ITaskItem<T> : ITaskItem
+    public interface ITaskWorkItem<T> : ITaskWorkItem
     {
         Task<T> GetResultAsync();
     }

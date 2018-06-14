@@ -3,23 +3,55 @@ using System.Threading.Tasks;
 
 namespace TaskRunner
 {
-    public class TaskItem : ITaskItem
+    public class TaskWorkItem :TaskWorkItemBase
     {
-        public TaskItem(Action action)
+        public TaskWorkItem(Action action)
         {
             Action = action;
         }
 
         private Action Action { get; }
 
-        public void Run()
+
+        protected override void RunInternal()
         {
             Action?.Invoke();
         }
     }
-    public class TaskItem<T> : ITaskItem<T>
+
+    public abstract class TaskWorkItemBase : ITaskWorkItem
+    {
+
+        public event Action<ITaskWorkItem> TaskRunning;
+        public event Action<ITaskWorkItem> TaskCompleted;
+        public event Action<ITaskWorkItem,Exception> TaskFaulted;
+
+        public string Name { get; set; }
+
+        public void Run()
+        {
+            TaskRunning?.Invoke(this);
+            try
+            {
+                RunInternal();
+            }
+            catch (Exception ex)
+            {
+                TaskFaulted?.Invoke(this,ex);
+                return;
+            }
+            TaskCompleted?.Invoke(this);
+        }
+
+        protected abstract void RunInternal();
+
+    }
+
+
+    public class TaskWorkItem<T>:TaskWorkItemBase,ITaskWorkItem<T>
     {
         private readonly TaskCompletionSource<T> _tcs = new TaskCompletionSource<T>();
+
 
         private Func<T> Func { get; }
 
@@ -28,7 +60,7 @@ namespace TaskRunner
             return _tcs.Task;
         }
 
-        public void Run()
+        protected override void RunInternal()
         {
             try
             {
@@ -39,10 +71,9 @@ namespace TaskRunner
             {
                 _tcs.SetException(ex);
             }
-
         }
 
-        public TaskItem(Func<T> func)
+        public TaskWorkItem(Func<T> func)
         {
             Func = func;
         }
