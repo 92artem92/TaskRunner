@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
+using System;
+using System.Threading;
 
 namespace TaskRunner.Tests
 {
@@ -9,21 +9,10 @@ namespace TaskRunner.Tests
     public class TaskRunnerTest
     {
         [Test]
-        public void ShouldBeInOneInstance()
-        {
-            //arrange 
-            //action
-            var taskRunner1 = TaskRunner.GetTaskRunner();
-            var taskRunner2 = TaskRunner.GetTaskRunner();
-            //assert 
-            Assert.That(taskRunner1,Is.EqualTo(taskRunner2));
-        }
-
-        [Test]
         public void ShouldRunTask()
         {
             //arrange 
-            var taskRunner = TaskRunner.GetTaskRunner();
+            var taskRunner = TaskRunner.Instance;
             var taskMock = new Mock<ITask>();
             taskMock.Setup(t => t.Run()).Callback(AssertTest);
 
@@ -42,7 +31,7 @@ namespace TaskRunner.Tests
         public void WhenPreviousTaskThrowException_NextTaskShouldBeExcuted()
         {
             //arrange 
-            var taskRunner = TaskRunner.GetTaskRunner();
+            var taskRunner = TaskRunner.Instance;
             var taskMock = new Mock<ITask>();
             var secondTaskMock = new Mock<ITask>();
             taskMock.Setup(t => t.Run()).Throws<Exception>();
@@ -57,5 +46,24 @@ namespace TaskRunner.Tests
             }
         }
 
+        [Test]
+        public void ShouldExecutesAllTasks()
+        {
+            //arrange 
+            var taskRunner = TaskRunner.Instance;
+            var taskMock = new Mock<ITask>();
+            var expectedTaskCount = 100;
+            var actualCompletedTaskCount = 0;
+            taskMock.Setup(t => t.Run()).Raises(t => expectedTaskCount++);
+           
+            //action 
+            for (var i=0; i < expectedTaskCount; i++)
+            {
+                taskRunner.AddTask(taskMock.Object);
+            }
+
+            //assert
+            Thread.Sleep(0);
+        }
     }
 }

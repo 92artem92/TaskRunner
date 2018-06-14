@@ -4,7 +4,6 @@ namespace TaskRunner
 {
     public abstract class TaskBase : ITask
     {
-
         public event Action<ITask> Running;
         public event Action<ITask> Success;
         public event Action<ITask,Exception> Faulted;

@@ -8,6 +8,6 @@ namespace TaskRunner
         void Run();
         event Action<ITask> Running;
         event Action<ITask> Success;
-        event Action<ITask, Exception> Faulted;
+        event Action<ITask, Exception> Faulted; 
     }
 }

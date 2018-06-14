@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace TaskRunner.Tests
 {
     [TestFixture]
-    public class TaskWorkItemItemTest
+    public class ActionTaskTests
     {
         [Test]
         public void ShouldExecuteDelegate()
@@ -58,7 +58,6 @@ namespace TaskRunner.Tests
             var exception = new Exception();
             var task = new ActionTask(() => throw exception);
             var callbackMock = new Mock<Action<ITask,Exception>>();
-
             task.Faulted += callbackMock.Object;
 
             //action 

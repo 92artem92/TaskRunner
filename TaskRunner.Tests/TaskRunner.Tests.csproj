@@ -68,8 +68,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TaskItemGenericTest.cs" />
-    <Compile Include="TaskWorkItemItemTest.cs" />
+    <Compile Include="AsyncTaskResultTests.cs" />
+    <Compile Include="ActionTaskTest.cs" />
     <Compile Include="TaskRunnerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
