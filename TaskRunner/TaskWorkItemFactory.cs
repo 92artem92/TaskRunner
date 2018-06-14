@@ -4,14 +4,14 @@ namespace TaskRunner
 {
     public class TaskWorkItemFactory
     {
-        public ITaskWorkItem GetInstance(Action action)
+        public ITask GetInstance(Action action)
         {
-            return new TaskWorkItem(action);
+            return new ActionTask(action);
         }
 
-        public ITaskWorkItem<T> GetInstance<T>(Func<T> func)
+        public IFuncTask<T> GetInstance<T>(Func<T> func)
         {
-            return new TaskWorkItem<T>(func);
+            return new FuncTask<T>(func);
         }
     }
 }

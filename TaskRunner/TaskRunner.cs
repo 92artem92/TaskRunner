@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
 using System.Threading;
 
 namespace TaskRunner
 {
     public class TaskRunner
     {
-
+       
         private  static TaskRunner _instance;
-        private  static readonly object Lock=new object();
-        private readonly ConcurrentQueue<ITaskWorkItem> _taskQueue = new ConcurrentQueue<ITaskWorkItem>();
+        private static readonly object Lock = new object();
+        private readonly ConcurrentQueue<ITask> _taskQueue = new ConcurrentQueue<ITask>();
         private readonly TaskWorkItemFactory _factory=new TaskWorkItemFactory();
         public event Action<Exception> ExceptionHandler;
 
@@ -28,14 +29,11 @@ namespace TaskRunner
                     if(_instance==null)
                         _instance=new TaskRunner();
                 }
-            }
-            
+            }  
             return _instance;
         }
 
-        
-
-        public void AddTask(ITaskWorkItem task)
+        public void AddTask(ITask task)
         {
             _taskQueue.Enqueue(task);
         }
@@ -49,7 +47,6 @@ namespace TaskRunner
         {
            AddTask(_factory.GetInstance(func));
         }
-
 
 
         private void Worker()
@@ -72,6 +69,8 @@ namespace TaskRunner
             }
             
         }
+        
+
     }
 
 

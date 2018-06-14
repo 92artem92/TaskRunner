@@ -2,12 +2,12 @@
 
 namespace TaskRunner
 {
-    public abstract class TaskWorkItemBase : ITaskWorkItem
+    public abstract class TaskBase : ITask
     {
 
-        public event Action<ITaskWorkItem> TaskRunning;
-        public event Action<ITaskWorkItem> TaskCompleted;
-        public event Action<ITaskWorkItem,Exception> TaskFaulted;
+        public event Action<ITask> TaskRunning;
+        public event Action<ITask> TaskSuccess;
+        public event Action<ITask,Exception> TaskFaulted;
 
         public string Name { get; set; }
 
@@ -23,7 +23,7 @@ namespace TaskRunner
                 TaskFaulted?.Invoke(this,ex);
                 return;
             }
-            TaskCompleted?.Invoke(this);
+            TaskSuccess?.Invoke(this);
         }
 
         protected abstract void RunInternal();
