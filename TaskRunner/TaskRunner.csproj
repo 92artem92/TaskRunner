@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncTaskResult.cs" />
-    <Compile Include="IFuncTask.cs" />
+    <Compile Include="IAsyncTaskResult.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="TaskRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

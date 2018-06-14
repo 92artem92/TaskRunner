@@ -58,16 +58,14 @@ namespace TaskRunner
                     try
                     {
                         task.Run();
-                    }
-                    //prevent tasks execution stopping 
+                    } 
                     catch (Exception ex)
                     {
                         ExceptionHandler?.Invoke(ex);
                     }
                 }
                 Thread.Sleep(1);
-            }
-            
+            } 
         }
         
 
