@@ -9,6 +9,17 @@ namespace TaskRunner.Tests
     public class TaskRunnerTest
     {
         [Test]
+        public void ShouldBeInOneInstance()
+        {
+            //arrange 
+            //action
+            var taskRunner1 = TaskRunner.GetTaskRunner();
+            var taskRunner2 = TaskRunner.GetTaskRunner();
+            //assert 
+            Assert.That(taskRunner1,Is.EqualTo(taskRunner2));
+        }
+
+        [Test]
         public void ShouldRunTask()
         {
             //arrange 
