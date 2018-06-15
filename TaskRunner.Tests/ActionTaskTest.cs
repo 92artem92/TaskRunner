@@ -26,14 +26,14 @@ namespace TaskRunner.Tests
         {
             //arrange 
             var task = new ActionTask(()=>{});
-            var callbackMock=new Mock<Action<ITask>>();
-            task.Success += callbackMock.Object;
+            var actionMock=new Mock<Action<ITask>>();
+            task.Success += actionMock.Object;
 
             //action 
             task.Run();
 
             //assert
-            callbackMock.Verify(c=>c(It.IsAny<ITask>()),Times.Once);
+            actionMock.Verify(c=>c(It.IsAny<ITask>()),Times.Once);
         }
 
         [Test]
@@ -41,14 +41,14 @@ namespace TaskRunner.Tests
         {
             //arrange 
             var task = new ActionTask(() => { });
-            var callbackMock = new Mock<Action<ITask>>();
-            task.Running += callbackMock.Object;
+            var actionMock = new Mock<Action<ITask>>();
+            task.Running += actionMock.Object;
 
             //action 
             task.Run();
 
             //assert
-            callbackMock.Verify(c => c(It.IsAny<ITask>()), Times.Once);
+            actionMock.Verify(c => c(It.IsAny<ITask>()), Times.Once);
         }
 
         [Test]
@@ -57,14 +57,14 @@ namespace TaskRunner.Tests
             //arrange 
             var exception = new Exception();
             var task = new ActionTask(() => throw exception);
-            var callbackMock = new Mock<Action<ITask,Exception>>();
-            task.Faulted += callbackMock.Object;
+            var actionMock = new Mock<Action<ITask,Exception>>();
+            task.Faulted += actionMock.Object;
 
             //action 
             task.Run();
 
             //assert
-            callbackMock.Verify(c => c(It.IsAny<ITask>(),exception), Times.Once);
+            actionMock.Verify(c => c(It.IsAny<ITask>(),exception), Times.Once);
         }
     }
 }
