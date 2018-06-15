@@ -27,7 +27,7 @@ namespace TaskRunner.Tests
         }
 
         [Test]
-        public void GetResultAsync_ShouldThrowException_WhenFuncThrowsToo()
+        public void GetResultAsyncShouldThrowExceptionWhenFuncThrowsToo()
         {
             //arrange
             var exception=new NullReferenceException();

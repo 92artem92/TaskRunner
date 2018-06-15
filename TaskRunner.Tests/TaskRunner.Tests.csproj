@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="AsyncTaskResultTests.cs" />
     <Compile Include="ActionTaskTest.cs" />
-    <Compile Include="TaskRunnerTest.cs" />
+    <Compile Include="TaskRunnerIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
